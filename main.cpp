@@ -57,6 +57,7 @@ string get_nombre_dia(int);
 void get_fecha(FechaFAT12 *,fecha *);
 int algoritmo(fecha *F);
 int inicio_mes(int mes, int anio);  //Se usa en algoritmo()
+void fecha2FechaFAT2(fecha *,FechaFAT12 *);
 
 /**
  * Colocar en el arreglo name el nombre de archivo 
@@ -161,6 +162,10 @@ void get_fecha(FechaFAT12 *f_FAT12,fecha *fechaPt){
 	fechaPt->a=f_FAT12->anio+1980;
 }
 
+/**
+  La funci\'on algoritmo fue proporcionada por
+  Jose Luis <secondnames>
+*/
 int algoritmo(fecha *F){
     int t, inM;
     inM=inicio_mes(F->m,F->a);
@@ -168,6 +173,10 @@ int algoritmo(fecha *F){
     return t;
     }
 
+/**
+  La funci\'on algoritmo fue proporcionada por
+  Jose Luis <secondnames>
+*/
 int inicio_mes(int mes, int anio)
 {
     if (anio%4!=0){
@@ -264,6 +273,12 @@ void convert_name2FAT12(string filename,char name[MAX]){
 //  cout<<endl;
 }
 
+void fecha2FechaFAT2(fecha *fecha_ptr,FechaFAT12 *FechaFAT12_ptr){
+	FechaFAT12_ptr->dia=fecha_ptr->d;
+	FechaFAT12_ptr->mes=fecha_ptr->m;
+	FechaFAT12_ptr->anio=fecha_ptr->a-1980;
+}
+
 /**Cumplimentar los datos de la estructura archivo a 
    partir de la informaci\'on proporcionada con los 
    par\'ametros stringNombreDArchivo y fechaPt.
@@ -271,7 +286,13 @@ void convert_name2FAT12(string filename,char name[MAX]){
 void fill_archivo(string stringNombreDArchivo,
                   struct fecha *fechaPt,
 				  struct archivo *archivoPt){
-  	// Ejercicio 2018.03.14			  	
+  	// Ejercicio 2018.03.14	
+  	char array[MAX];
+	convert_name2FAT12(stringNombreDArchivo,array);
+	for(int i=0;i<12;i++){
+		archivoPt->name[i]=array[i];
+	}									
+	fecha2FechaFAT2(fechaPt,&archivoPt->fechF12);
 }
 
 
